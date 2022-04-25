@@ -1,0 +1,28 @@
+# Datos del módulo
+name: 'module_template_name'
+description: 'module_template_name - Functionalities'
+project: 'module_template'
+
+# Datos de la versión
+package: custom
+type: module
+version: '1.0.0'
+
+# Tema
+base theme: false
+
+# Configuración
+configure: custom_module.module_template.settings
+
+# Dependencias
+dependencies:
+  - node
+
+# Requisitos
+core_version_requirement: ^8.8 || ^9
+requirements:
+  _permission: 'config module_template'
+
+# Traducciones
+'interface translation project': module_template
+'interface translation server pattern': 'modules/custom/module_template/config/translations/module_template.%language.po'
