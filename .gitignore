@@ -1,0 +1,10 @@
+# Excluir la configuración de vscode excepto el archivo sftp.json
+.vscode/*
+!.vscode/tasks.json
+
+# Archivos de desarrollo NPM.
+node_modules
+vendor
+
+# Archivos propios de VSCode.
+debug.log
