@@ -1,0 +1,8 @@
+################################################################################
+# CONFIGURACIÓN DEL MÓDULO                                                     #
+################################################################################
+
+# Configuración general
+config module_template:
+  title: 'Config module_template_name'
+  description: 'Allow users to access module_template_name Config.'

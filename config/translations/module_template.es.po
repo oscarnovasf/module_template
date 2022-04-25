@@ -1,0 +1,60 @@
+# Spanish translation for module_template_name
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: module_template_name (1.0.0)\n"
+"Last-Translator: Óscar Novás <hola@oscarnovas.com>\n"
+"Language-Team: OscarNovas.com <hola@oscarnovas.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+# #############################################################################
+# src/form
+# #############################################################################
+
+# config/SettingsForm.php
+msgid "General"
+msgstr "General"
+
+msgid "<p><h2>General Settings</h2></p>"
+msgstr "<p><h2>Configuración General</h2></p>"
+
+msgid "Info"
+msgstr "Información"
+
+msgid "Help"
+msgstr "Ayuda"
+
+# #############################################################################
+# src/Templates
+# #############################################################################
+
+# #############################################################################
+# /
+# #############################################################################
+
+# module_template.info.yml
+msgid "module_template_name - Functionalities"
+msgstr "module_template_name - Funcionalidades"
+
+# module_template.links.menu.yml
+msgid "module_template_name - Settings"
+msgstr "module_template_name - Configuración"
+
+msgid "Global settings for module_template_name"
+msgstr "Configuración global para module_template_name"
+
+# module_template.module
+
+# module_template.permissions.yml
+msgid "Config module_template_name"
+msgstr "Configurar module_template_name"
+
+msgid "Allow users to access module_template_name Config."
+msgstr "Permitir a los usuarios acceder a la configuración de module_template_name."
+
+# module_template.routing.yml
+msgid "module_template_name - Settings"
+msgstr "module_template_name - Configuración"
