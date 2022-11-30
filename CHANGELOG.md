@@ -6,6 +6,17 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
   > Ver TODO.md
 
 ---
+* ## [v2.0.1] - 2022-11-30
+  > Nuevas funcionalidades.
+
+  * #### Añadido:
+    - Compatibilidad con Drupal 10.
+    - Mejora de la documentación.
+
+  * #### Corrección de errores:
+    - Error al mostrar la ayuda del módulo si no existe el archivo README.md.
+
+---
 * ## [v2.0.0] - 2022-04-25
   > Nuevas funcionalidades.
 

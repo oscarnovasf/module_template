@@ -31,20 +31,22 @@ function module_template_help($route_name, RouteMatchInterface $route_match) {
       if (file_exists($readme_ruta)) {
         $contenido = file_get_contents($readme_ruta);
         $contenido = Markup::create($parser->text($contenido));
-      }
 
-      $template_path = $module_path . "/templates/custom/help.html.twig";
-      $template = file_get_contents($template_path);
-      $build = [
-        'description' => [
-          '#type' => 'inline_template',
-          '#template' => $template,
-          '#context' => [
-            'readme' => $contenido,
-          ],
-        ],
-      ];
-      return $build;
+        if ($contenido) {
+          $template_path = $module_path . "/templates/custom/help.html.twig";
+          $template = file_get_contents($template_path);
+          $build = [
+            'description' => [
+              '#type' => 'inline_template',
+              '#template' => $template,
+              '#context' => [
+                'readme' => $contenido,
+              ],
+            ],
+          ];
+          return $build;
+        }
+      }
 
     default:
   }
