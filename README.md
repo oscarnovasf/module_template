@@ -20,7 +20,6 @@ se incluye pero se podrá encontrar en un futuro en otro de mis repositorios.
 
 ## Requisitos
 * Se necesita una versión de git superior a la 2.0.
-* Script para iniciar proyectos (no incluido)
 
 ---
 
