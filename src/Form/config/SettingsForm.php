@@ -10,6 +10,9 @@ namespace Drupal\module_template\Form\config;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\Extension\ExtensionPathResolver;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Drupal\module_template\lib\general\MarkdownParser;
 
@@ -19,17 +22,43 @@ use Drupal\module_template\lib\general\MarkdownParser;
 class SettingsForm extends ConfigFormBase {
 
   /**
+   * Undocumented variable
+   *
+   * @var \Drupal\Core\Extension\ExtensionPathResolver
+   */
+  protected $pathResolver;
+
+  /**
+   * Constructor para añadir dependencias.
+   *
+   * @param \Drupal\Core\Extension\ExtensionPathResolver $logger
+   *   Servicio PathResolver.
+   */
+  public function __construct(ExtensionPathResolver $path_resolver) {
+    $this->pathResolver = $path_resolver;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('extension.path.resolver'),
+    );
+  }
+
+  /**
    * Implements getFormId().
    */
   public function getFormId() {
-    return 'custom_module.module_template.settings';
+    return 'module_template.settings';
   }
 
   /**
    * Implements getEditableConfigNames().
    */
   protected function getEditableConfigNames() {
-    return ['custom_module.module_template.settings'];
+    return ['module_template.settings'];
   }
 
   /**
@@ -39,7 +68,7 @@ class SettingsForm extends ConfigFormBase {
 
     /* Obtengo la configuración actual */
     /* $config = \Drupal::configFactory()->getEditable('custom_module.module_template.settings'); */
-    $config = $this->config('custom_module.module_template.settings');
+    $config = $this->config('module_template.settings');
 
     /* SETTINGS FORM */
     $form['settings'] = [
@@ -60,7 +89,7 @@ class SettingsForm extends ConfigFormBase {
      * ************************************************************************/
 
     /* Datos auxiliares */
-    $module_path = drupal_get_path('module', "module_template");
+    $module_path = $this->pathResolver->getPath('module', "module_template");
     $parser = new MarkdownParser();
 
     /* Templates */
@@ -158,7 +187,7 @@ class SettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
-    $config = $this->config('custom_module.module_template.settings');
+    $config = $this->config('module_template.settings');
 
     /* TODO: Indicar todos los campos a guardar */
     $list = [];

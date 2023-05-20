@@ -12,7 +12,7 @@ version: '1.0.0'
 base theme: false
 
 # Configuración
-configure: custom_module.module_template.settings
+configure: module_template.settings
 
 # Dependencias
 dependencies:

@@ -6,13 +6,9 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Markup;
 
 use Drupal\module_template\lib\general\MarkdownParser;
-
-/* Ficheros de funciones para los hooks */
-include __DIR__ . '/src/lib/includes/form_alter.inc';
 
 /**
  * Implements hook_help().
@@ -24,7 +20,8 @@ function module_template_help($route_name, RouteMatchInterface $route_match) {
       /* Añado el contenido del archivo README.md a la ayuda del módulo */
       $parser = new MarkdownParser();
 
-      $module_path = drupal_get_path('module', "module_template");
+      $module_path = \Drupal::service('extension.path.resolver')
+        ->getPath('module', "module_template");
 
       $readme_ruta = $module_path . "/README.md";
       $contenido = '';
@@ -64,9 +61,11 @@ function module_template_page_attachments(array &$attachments) {
  * Implements hook_mail().
  */
 function module_template_mail(string $key, array &$message, array $params) {
+  $config_site = \Drupal::config('system.site');
+
   /* Cabeceras */
   $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed; delsp=yes';
-  $message['from'] = \Drupal::config('system.site')->get('name') . '<' . \Drupal::config('system.site')->get('mail') . '>';
+  $message['from'] = $config_site->get('name') . '<' . $config_site->get('mail') . '>';
 
   /* Copias del mensaje */
   if (isset($params['Cc']) and !is_null($params['Cc'])) {
@@ -93,18 +92,5 @@ function module_template_mail(string $key, array &$message, array $params) {
         'filemime' => $attachment['filemime'],
       ];
     }
-  }
-}
-
-/**
- * Implements hook_form_alter().
- */
-function module_template_form_alter(array &$form, FormStateInterface $form_state, string $form_id) {
-
-  switch ($form_id) {
-
-    case '':
-      break;
-
   }
 }

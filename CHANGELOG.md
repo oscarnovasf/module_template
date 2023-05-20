@@ -6,6 +6,21 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
   > Ver TODO.md
 
 ---
+* ## [v2.0.2] - 2023-05-19
+  > Mejoras.
+
+  * #### Añadido:
+    - Funcionalidad para eliminar pequeños rastros de configuraciones al
+      desinstalar el módulo.
+
+  * #### Cambios:
+    - Mejora de la documentación del repositorio.
+
+  * #### Corrección de errores
+    - Adaptación de algunas llamadas a funciones y pasarlas a servicios.
+    - Ajustes en los menús que genera el módulo por problemas con las rutas.
+
+---
 * ## [v2.0.1] - 2022-11-30
   > Nuevas funcionalidades.
 

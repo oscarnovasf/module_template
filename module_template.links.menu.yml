@@ -24,8 +24,8 @@ custom_module.module_template.admin:
 ################################################################################
 
 # Formulario de configuración.
-custom_module.module_template.settings:
+module_template.settings:
   title: Settings
   description: 'Global settings for module_template_name'
-  route_name: custom_module.module_template.settings
+  route_name: module_template.settings
   parent: custom_module.module_template.admin

@@ -33,7 +33,7 @@ custom_module.module_template.admin:
 ################################################################################
 
 # Ruta para el formulario de configuración.
-custom_module.module_template.settings:
+module_template.settings:
   path: '/admin/custom_modules/module_template/settings'
   defaults:
     _form: '\Drupal\module_template\Form\config\SettingsForm'

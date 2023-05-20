@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the custom module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function module_template_uninstall($is_syncing) {
+  $config = \Drupal::configFactory()
+    ->getEditable('module_template.settings');
+
+  if (is_object($config)) {
+    $config->delete();
+  }
+}
