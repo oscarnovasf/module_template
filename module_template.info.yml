@@ -1,7 +1,7 @@
 # Datos del módulo
 name: 'module_template_name'
 description: 'module_template_name - Functionalities'
-project: 'module_template'
+# project: 'module_template'
 
 # Datos de la versión
 package: custom

@@ -31,8 +31,8 @@ se incluye pero se podrá encontrar en un futuro en otro de mis repositorios.
 
 [mi-web]: https://oscarnovas.com "for developers"
 
-[version]: v2.0.2
-[version-badge]: https://img.shields.io/badge/Versión-2.0.2-blue.svg
+[version]: v2.0.3
+[version-badge]: https://img.shields.io/badge/Versión-2.0.3-blue.svg
 
 [license]: LICENSE.md
 [license-badge]: https://img.shields.io/badge/Licencia-GPLv3+-green.svg "Leer la licencia"

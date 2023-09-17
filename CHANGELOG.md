@@ -6,6 +6,17 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
   > Ver TODO.md
 
 ---
+* ## [v2.0.3] - 2023-09-17
+  > Mejoras.
+
+  * #### Cambios:
+    - Refactor del formulario de configuración del módulo.
+
+  * ### Eliminados:
+    - Nombre del paquete, no es necesario y molesta a la hora de buscar
+      actualizaciones.
+
+---
 * ## [v2.0.2] - 2023-05-19
   > Mejoras.
 
