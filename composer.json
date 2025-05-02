@@ -6,9 +6,10 @@
     "version": "1.0.0",
 
     "require": {
+        "drupal/core": "^10 || ^11"
     },
 
     "require-dev": {
-        "drupal/potx": "^1.0"
+        "drupal/potx": "^1.1"
     }
 }

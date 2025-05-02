@@ -5,48 +5,14 @@
  * module_template.module.
  */
 
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Render\Markup;
 
-use Drupal\module_template\lib\general\MarkdownParser;
-
 /**
- * Implements hook_help().
+ * Implements hook_toolbar_alter().
  */
-function module_template_help($route_name, RouteMatchInterface $route_match) {
-  switch ($route_name) {
-
-    case 'help.page.module_template':
-      /* Añado el contenido del archivo README.md a la ayuda del módulo */
-      $parser = new MarkdownParser();
-
-      $module_path = \Drupal::service('extension.path.resolver')
-        ->getPath('module', "module_template");
-
-      $readme_ruta = $module_path . "/README.md";
-      $contenido = '';
-      if (file_exists($readme_ruta)) {
-        $contenido = file_get_contents($readme_ruta);
-        $contenido = Markup::create($parser->text($contenido));
-
-        if ($contenido) {
-          $template_path = $module_path . "/templates/custom/help.html.twig";
-          $template = file_get_contents($template_path);
-          $build = [
-            'description' => [
-              '#type' => 'inline_template',
-              '#template' => $template,
-              '#context' => [
-                'readme' => $contenido,
-              ],
-            ],
-          ];
-          return $build;
-        }
-      }
-
-    default:
-  }
+function module_template_toolbar_alter(&$items) {
+  /* Añado iconos a la toolbar de administración */
+  $items['administration']['#attached']['library'][] = 'module_template/toolbar';
 }
 
 /**

@@ -23,3 +23,10 @@ markdown:
   css:
     theme:
       css/markdown.css: {}
+
+# Para el icono de la barra de herramientas.
+toolbar:
+  version: VERSION
+  css:
+    theme:
+      css/toolbar.css: {}

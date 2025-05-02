@@ -7,13 +7,15 @@ namespace Drupal\module_template\Form\config;
  * SettingsForm.php
  */
 
+use Drupal\Core\Config\Config;
+use Drupal\Core\Extension\ExtensionPathResolver;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Markup;
-use Drupal\Core\Config\Config;
-use Drupal\Core\Extension\ExtensionPathResolver;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 use Drupal\module_template\lib\general\MarkdownParser;
 
@@ -23,19 +25,14 @@ use Drupal\module_template\lib\general\MarkdownParser;
 class SettingsForm extends ConfigFormBase {
 
   /**
-   * @var \Drupal\Core\Extension\ExtensionPathResolver
-   */
-  protected $pathResolver;
-
-  /**
    * Constructor para añadir dependencias.
    *
-   * @param \Drupal\Core\Extension\ExtensionPathResolver $logger
+   * @param \Drupal\Core\Extension\ExtensionPathResolver $pathResolver
    *   Servicio PathResolver.
    */
-  public function __construct(ExtensionPathResolver $path_resolver) {
-    $this->pathResolver = $path_resolver;
-  }
+  public function __construct(
+    protected ExtensionPathResolver $pathResolver,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -50,7 +47,7 @@ class SettingsForm extends ConfigFormBase {
    * Implements getFormId().
    */
   public function getFormId() {
-    return 'module_template.settings';
+    return 'module_template_settings';
   }
 
   /**
@@ -66,7 +63,6 @@ class SettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     /* Obtengo la configuración actual */
-    /* $config = \Drupal::configFactory()->getEditable('custom_module.module_template.settings'); */
     $config = $this->config('module_template.settings');
 
     /* SETTINGS FORM */
@@ -74,13 +70,8 @@ class SettingsForm extends ConfigFormBase {
       '#type' => 'vertical_tabs',
     ];
 
-    $form['general_settings'] = [
-      '#type' => 'details',
-      '#title' => $this->t('General'),
-      '#open' => TRUE,
-      '#group' => 'settings',
-      '#description' => $this->t('<p><h2>General Settings</h2></p>'),
-    ];
+    $form['general_settings'] = $this->getGeneralSettings($config);
+    $form['general_settings']['#open'] = TRUE;
 
     /* *************************************************************************
      * CONTENIDO DE CHANGELOG.md, LICENSE.md y README.md
@@ -137,6 +128,26 @@ class SettingsForm extends ConfigFormBase {
   }
 
   /**
+   * Genera el formulario para la configuración general del módulo.
+   *
+   * @param \Drupal\Core\Config\Config $config
+   *   Configuración del módulo.
+   *
+   * @return array
+   *   Array con el contenido a renderizar, si procede.
+   */
+  private function getGeneralSettings(Config $config): array {
+    $form['general_settings'] = [
+      '#type'        => 'details',
+      '#title'       => $this->t('General'),
+      '#group'       => 'settings',
+      '#description' => $this->t('<p><h2>General Settings</h2></p>'),
+    ];
+
+    return $form['general_settings'];
+  }
+
+  /**
    * Obtiene el contenido del archivo CHANGELOG.md.
    *
    * @param \Drupal\Core\Config\Config $config
@@ -147,32 +158,59 @@ class SettingsForm extends ConfigFormBase {
    * @return array
    *   Array con el contenido a renderizar, si procede.
    */
-  private function getChangeLogBuild(Config $config, string $module_path): array {
+  private function getChangeLogBuild(
+    Config $config,
+    string $module_path,
+  ): array {
     $template = file_get_contents($module_path . "/templates/custom/info.html.twig");
+    $has_content = FALSE;
 
     $ruta = $module_path . "/CHANGELOG.md";
     $contenido = $this->getMdContent($ruta);
 
-    if ($contenido) {
-      $form['info'] = [
-        '#type' => 'details',
-        '#title' => $this->t('Info'),
-        '#group' => 'settings',
-        '#description' => '',
+    $form['info'] = [
+      '#type'        => 'details',
+      '#title'       => $this->t('Info'),
+      '#group'       => 'settings',
+      '#description' => '',
+    ];
 
-        'info' => [
-          '#type' => 'inline_template',
-          '#template' => $template,
-          '#context' => [
-            'changelog' => Markup::create($contenido),
-          ],
+    if ($contenido) {
+      $form['info']['info'] = [
+        '#type'     => 'inline_template',
+        '#template' => $template,
+        '#context'  => [
+          'changelog' => Markup::create($contenido),
         ],
       ];
-
-      return $form['info'];
+      $has_content = TRUE;
     }
 
-    return [];
+    $rows = $this->generateGitTable();
+    if (count($rows) > 0) {
+      $form['info']['git_resume'] = [
+        '#type' => 'fieldset',
+        '#title' => $this->t('<h2>Git (last 10 commits)</h2>'),
+
+        'table' => [
+          '#type' => 'table',
+          '#title' => $this->t('Git Resume'),
+          '#header' => [
+            'HASH',
+            $this->t("Author"),
+            $this->t("Date"),
+            $this->t("Message"),
+          ],
+          '#rows' => $rows,
+          '#empty' => $this->t('No data has been found.'),
+          '#responsive' => TRUE,
+          '#sticky' => FALSE,
+        ],
+      ];
+      $has_content = TRUE;
+    }
+
+    return $has_content ? $form['info'] : [];
   }
 
   /**
@@ -186,7 +224,10 @@ class SettingsForm extends ConfigFormBase {
    * @return array
    *   Array con el contenido a renderizar, si procede.
    */
-  private function getLicenseBuild(Config $config, string $module_path): array {
+  private function getLicenseBuild(
+    Config $config,
+    string $module_path,
+  ): array {
     $template = file_get_contents($module_path . "/templates/custom/license.html.twig");
 
     $ruta = $module_path . "/LICENSE.md";
@@ -194,15 +235,15 @@ class SettingsForm extends ConfigFormBase {
 
     if ($contenido) {
       $form['license'] = [
-        '#type' => 'details',
-        '#title' => $this->t('License'),
-        '#group' => 'settings',
+        '#type'        => 'details',
+        '#title'       => $this->t('License'),
+        '#group'       => 'settings',
         '#description' => '',
 
         'license' => [
-          '#type' => 'inline_template',
+          '#type'     => 'inline_template',
           '#template' => $template,
-          '#context' => [
+          '#context'  => [
             'license' => Markup::create($contenido),
           ],
         ],
@@ -215,7 +256,7 @@ class SettingsForm extends ConfigFormBase {
   }
 
   /**
-   * Obtiene el contenido del archivo LICENSE.md.
+   * Obtiene el contenido del archivo README.md.
    *
    * @param \Drupal\Core\Config\Config $config
    *   Configuración del módulo.
@@ -225,7 +266,10 @@ class SettingsForm extends ConfigFormBase {
    * @return array
    *   Array con el contenido a renderizar, si procede.
    */
-  private function getReadmeBuild(Config $config, string $module_path): array {
+  private function getReadmeBuild(
+    Config $config,
+    string $module_path,
+  ): array {
     $template = file_get_contents($module_path . "/templates/custom/help.html.twig");
 
     $ruta = $module_path . "/README.md";
@@ -233,15 +277,15 @@ class SettingsForm extends ConfigFormBase {
 
     if ($contenido) {
       $form['help'] = [
-        '#type' => 'details',
-        '#title' => $this->t('Help'),
-        '#group' => 'settings',
+        '#type'        => 'details',
+        '#title'       => $this->t('Help'),
+        '#group'       => 'settings',
         '#description' => '',
 
         'help' => [
-          '#type' => 'inline_template',
+          '#type'     => 'inline_template',
           '#template' => $template,
-          '#context' => [
+          '#context'  => [
             'readme' => Markup::create($contenido),
           ],
         ],
@@ -272,6 +316,44 @@ class SettingsForm extends ConfigFormBase {
     }
 
     return $contenido;
+  }
+
+  /**
+   * Genera un array con los últimos 10 commits de git.
+   *
+   * @return array
+   *   Array con los datos de la tabla.
+   */
+  private function generateGitTable(): array {
+    $row = [];
+    // phpcs:ignore
+    $command = ['git', 'log', '-n', '10', '--pretty=format:"%h%x09%an%x09%ad%x09%s"'];
+
+    // Crea el proceso.
+    $process = new Process($command);
+
+    try {
+      // Ejecuta el proceso
+      $process->mustRun();
+
+      // Obtiene la salida del comando
+      $output = $process->getOutput();
+
+      // Divide la salida en líneas
+      $lines = explode("\n", $output);
+
+      // Procesa cada línea
+      foreach ($lines as $line) {
+        // Divide la línea en sus componentes
+        $row[] = explode("\t", str_replace('"', '', $line));
+      }
+    }
+    catch (ProcessFailedException $exception) {
+      // El comando falló, maneja el error.
+      $this->logger('module_template')->error($exception->getMessage());
+    }
+
+    return $row;
   }
 
 }

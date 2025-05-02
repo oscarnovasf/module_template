@@ -5,6 +5,21 @@
  * Install, update and uninstall functions for the custom module.
  */
 
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_modules_installed().
+ */
+function expca_mails_modules_installed($modules) {
+  if (in_array('expca_mails', $modules)) {
+    $url = Url::fromRoute('expca_mails.settings');
+    if (PHP_SAPI != 'cli') {
+      \Drupal::messenger()->addMessage(t('You can now <a href="@url_settings">configure the Experiencias de Calidade: Mails module</a> for your site.',
+        ['@url_settings' => $url->toString()]), 'status');
+    }
+  }
+}
+
 /**
  * Implements hook_uninstall().
  */

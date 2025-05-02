@@ -6,6 +6,24 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
   > Ver TODO.md
 
 ---
+* ## [v2.0.4] - 2025-05-02
+  > Mejoras.
+
+  * #### Añadido:
+    - Aviso tras instalar el módulo para ir a la configuración.
+    - Icono para menú "Custom Modules".
+    - Ahora el formulario de configuración permite ver los últimos 10 commits
+      del código desplegado.
+
+  * #### Cambios:
+    - Pequeñas mejoras en el formulario de configuración del módulo.
+    - Versión mínima de Drupal (ahora es la 10).
+
+  * ### Eliminados:
+    - Carpetas obsoletas para documentación.
+    - Hook Help.
+
+---
 * ## [v2.0.3] - 2023-09-17
   > Mejoras.
 

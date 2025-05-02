@@ -1,0 +1,26 @@
+/* *****************************************************************************
+ * TOOLBAR
+ ******************************************************************************/
+
+/* Bar styling (first row), currently unused. */
+.toolbar-bar .toolbar-icon-custom-module-global-admin:before {
+  background-image: url("../img/custom.svg");
+}
+.toolbar-bar .toolbar-icon-custom-module-global-admin:active:before {
+  background-image: url("../img/custom.svg");
+}
+
+/* Tray styling (second row) */
+.toolbar-tray .toolbar-icon.toolbar-icon-custom-module-global-admin:before {
+  background-image: url("../img/custom.svg");
+
+  mask-image: url("../img/custom.svg") !important;
+  -webkit-mask-image: url("../img/custom.svg") !important;
+}
+.toolbar-tray .toolbar-icon.toolbar-icon-custom-module-global-admin:active:before,
+.toolbar-tray .toolbar-icon.toolbar-icon-custom-module-global-admin.is-active:before {
+  background-image: url("../img/custom.svg");
+
+  mask-image: url("../img/custom.svg") !important;
+  -webkit-mask-image: url("../img/custom.svg") !important;
+}
